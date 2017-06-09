@@ -1,0 +1,6 @@
+logging:
+  level: INFO
+  loggers:
+    greenhouse: DEBUG
+
+tempsensorfile: "/Users/henrikeriksson/w1_slave"

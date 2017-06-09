@@ -1,0 +1,6 @@
+logging:
+  level: INFO
+  loggers:
+    greenhouse: DEBUG
+
+tempsensorfile: "/sys/bus/w1/devices/28-000007105c6f/w1_slave"
