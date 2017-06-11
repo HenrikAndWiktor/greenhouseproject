@@ -8,6 +8,8 @@ import io.dropwizard.setup.Environment;
 
 import static se.henrikeriksson.greenhouse.resources.GpioPins.getPinFromBOARD;
 
+import org.knowm.dropwizard.sundial.SundialBundle;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
 import se.henrikeriksson.greenhouse.health.Health;
 import se.henrikeriksson.greenhouse.resources.GreenHouseStatus;
 
@@ -29,11 +31,20 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         // TODO: application initialization
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
-
-        myLed = gpio.provisionDigitalOutputPin(getPinFromBOARD(12),   // PIN
+        myLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
                 "My LED",           // PIN FRIENDLY NAME (optional)
                 PinState.LOW);      // PIN STARTUP STATE (optional)
+        myLed.setShutdownOptions(true, PinState.LOW);
+
+        bootstrap.addBundle(new SundialBundle<GreenHouseConfiguration>() {
+
+            @Override
+            public SundialConfiguration getSundialConfiguration(GreenHouseConfiguration configuration) {
+                return configuration.getSundialConfiguration();
+            }
+        });
     }
+
 
     @Override
     public void run(final GreenHouseConfiguration configuration,
@@ -42,5 +53,12 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         environment.healthChecks().register("myHealthCheck", new Health());
         final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, myLed);
         environment.jersey().register(statusResource);
+
+        // Add object to ServletContext for accessing from Sundial Jobs
+        environment.getApplicationContext().setAttribute("led", myLed);
     }
+
+
+
+
 }

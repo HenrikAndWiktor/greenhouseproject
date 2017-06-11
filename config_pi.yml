@@ -10,3 +10,13 @@ tempsensorfile: "/sys/bus/w1/devices/28-000007105c6f/w1_slave" #change this to y
 #Or:
 #xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
 #xx xx xx xx xx xx xx xx xx t=xxxx
+
+sundial:
+  thread-pool-size: 10
+  shutdown-on-unload: true
+  wait-on-shutdown: false
+  start-delay-seconds: 0
+  start-scheduler-on-load: true
+  global-lock-on-load: false
+  annotated-jobs-package-name: se.henrikeriksson.greenhouse.jobs
+  tasks: [startjob, stopjob]
