@@ -1,6 +1,14 @@
+#Dont use this file! This project uses pi4j which uses GPIO pins (and computers does'nt have GPIO pins).
+#Please use config_pi.yml. Thanks.
 logging:
   level: INFO
   loggers:
     greenhouse: DEBUG
 
-tempsensorfile: "/Users/henrikeriksson/w1_slave"
+tempsensorfile: "/Users/henrikeriksson/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
+#Format:
+#xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
+#xx xx xx xx xx xx xx xx xx t=xxxxx
+#Or:
+#xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
+#xx xx xx xx xx xx xx xx xx t=xxxx

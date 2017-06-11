@@ -47,8 +47,8 @@
         <configuration>
           <archive>
             <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>${mainClass}</mainClass>
+              <addClasspath>false</addClasspath>
+              <mainClass>se.henrikeriksson.greenhouse.GreenHouseApplication</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -95,6 +95,9 @@
             </goals>
             <configuration>
               <tasks>
+                <exec>
+                  <arg />
+                </exec>
                 <exec>
                   <arg />
                 </exec>

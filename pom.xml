@@ -75,6 +75,7 @@
                 <version>2.4.1</version>
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <outputFile>${basedir}/target/${artifactId}-${version}-shaded.jar</outputFile>
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
@@ -110,8 +111,8 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>${mainClass}</mainClass>
+                            <addClasspath>false</addClasspath>
+                            <mainClass>se.henrikeriksson.greenhouse.GreenHouseApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -160,7 +161,10 @@
                         <configuration>
                             <tasks>
                                 <exec executable="/bin/bash">
-                                    <arg value="/Users/henrikeriksson/Development/gitrepos/greenhouse/res/sh/sftpjar.sh"/>
+                                    <arg value="./res/sh/sftpjar.sh"/><!--change to your shell script-->
+                                </exec>
+                                <exec executable="/bin/bash">
+                                    <arg value="./res/sh/remoterestartjetty.sh"/><!--change to your shell script-->
                                 </exec>
                             </tasks>
                         </configuration>
@@ -169,5 +173,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

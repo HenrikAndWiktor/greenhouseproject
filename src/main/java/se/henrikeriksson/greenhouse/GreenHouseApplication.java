@@ -1,10 +1,14 @@
 package se.henrikeriksson.greenhouse;
 
 import com.pi4j.io.gpio.*;
+
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import se.henrikeriksson.greenhouse.resources.GpioPins;
+
+import static se.henrikeriksson.greenhouse.resources.GpioPins.getPinFromBOARD;
+
+import se.henrikeriksson.greenhouse.health.Health;
 import se.henrikeriksson.greenhouse.resources.GreenHouseStatus;
 
 public class GreenHouseApplication extends Application<GreenHouseConfiguration> {
@@ -26,7 +30,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
 
-        myLed = gpio.provisionDigitalOutputPin(GpioPins.getPinFromBOARD(12),   // PIN NUMBER
+        myLed = gpio.provisionDigitalOutputPin(getPinFromBOARD(12),   // PIN
                 "My LED",           // PIN FRIENDLY NAME (optional)
                 PinState.LOW);      // PIN STARTUP STATE (optional)
     }
@@ -35,6 +39,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     public void run(final GreenHouseConfiguration configuration,
                     final Environment environment) {
         // TODO: implement application
+        environment.healthChecks().register("myHealthCheck", new Health());
         final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, myLed);
         environment.jersey().register(statusResource);
     }

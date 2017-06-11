@@ -3,4 +3,10 @@ logging:
   loggers:
     greenhouse: DEBUG
 
-tempsensorfile: "/sys/bus/w1/devices/28-000007105c6f/w1_slave"
+tempsensorfile: "/sys/bus/w1/devices/28-000007105c6f/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
+#Format:
+#xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
+#xx xx xx xx xx xx xx xx xx t=xxxxx
+#Or:
+#xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
+#xx xx xx xx xx xx xx xx xx t=xxxx
