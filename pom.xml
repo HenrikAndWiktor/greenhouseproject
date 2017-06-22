@@ -46,6 +46,11 @@
             <artifactId>dropwizard-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-client</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
             <version>1.1</version>
@@ -166,11 +171,11 @@
                         <configuration>
                             <tasks>
                                 <exec executable="/bin/bash">
-                                    <arg value="./res/sh/sftpjar.sh"/><!--change to your shell script-->
-                                </exec>
-                                <exec executable="/bin/bash">
-                                    <arg value="./res/sh/remoterestartjetty.sh"/><!--change to your shell script-->
-                                </exec>
+                                  <arg value="./res/sh/sftpjar.sh"/>
+                              </exec>
+                                  <exec executable="/bin/bash">
+                                            <arg value="./res/sh/remoterestartjetty.sh"/>
+                                         </exec>
                             </tasks>
                         </configuration>
                     </execution>

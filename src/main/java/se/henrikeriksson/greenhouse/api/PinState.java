@@ -8,19 +8,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PinState {
 
-    private boolean isPinOn;
+    private String state;
 
     public PinState() {
 
     }
 
-    public PinState(boolean isPinOn) {
-        this.isPinOn = isPinOn;
+    public PinState(boolean pinstate) {
+        state = pinstate ? "on" : "off";
     }
 
 
     @JsonProperty
-    public  boolean isPinOn() {
-        return isPinOn;
+    public  String state() {
+        return state;
     }
 }

@@ -2,6 +2,7 @@ package se.henrikeriksson.greenhouse;
 
 import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.client.JerseyClientConfiguration;
 import org.hibernate.validator.constraints.*;
 import org.knowm.dropwizard.sundial.SundialConfiguration;
 
@@ -30,5 +31,14 @@ public class GreenHouseConfiguration extends Configuration {
     public SundialConfiguration getSundialConfiguration() {
 
         return sundialConfiguration;
+    }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private JerseyClientConfiguration httpClient = new JerseyClientConfiguration();
+
+    public JerseyClientConfiguration getJerseyClientConfiguration() {
+        return httpClient;
     }
 }

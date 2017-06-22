@@ -1,6 +1,7 @@
 package se.henrikeriksson.greenhouse.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,30 +12,80 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.FileNotFoundException;
 
-import se.henrikeriksson.greenhouse.api.GreenHouseTemp;
+import se.henrikeriksson.greenhouse.api.GreenHouseInfo;
 import se.henrikeriksson.greenhouse.api.PinState;
+import se.henrikeriksson.greenhouse.client.TempClientBean;
 
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/greenhousestatus")
 public class GreenHouseStatus {
+    public static class Time {
+        private int h;
+        private int m;
 
-    Logger log = LoggerFactory.getLogger(GreenHouseStatus.class);
-    GpioPinDigitalOutput myLed = null;
-    GreenHouseConfiguration configuration = null;
+        public Time(int hour, int min) {
+            h=hour;
+            m=min;
+        }
 
-    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput myLed){
-        this.configuration = configuration;
-        this.myLed = myLed;
+        public int getHour() {
+            return h;
+        }
+
+        public int getMinute() {
+            return m;
+        }
+
+        @Override
+        public String toString() {
+            return getHour()+":"+getMinute();
+        }
     }
+    private final Logger log = LoggerFactory.getLogger(GreenHouseStatus.class);
+    GpioPinDigitalOutput wateringPin = null;
+    GpioPinDigitalInput moisturePin = null;
+    GreenHouseConfiguration configuration = null;
+    Client wiktorPiClient = null;
+    public static Time lastTimeOnMoisture;
+
+    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput wateringPin, GpioPinDigitalInput moisturePin,Client wiktorPiClient){
+        this.configuration = configuration;
+        this.wateringPin = wateringPin;
+        this.moisturePin = moisturePin;
+        this.wiktorPiClient = wiktorPiClient;
+    }
+
+    public Double getOutdoorTemperature()
+    {
+        try {
+            //Do not hard code in your application
+            WebTarget webTarget = wiktorPiClient.target("http://www.wiktoreriksson.se/subdomain/weather/tempapp.json");
+            Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            @SuppressWarnings("rawtypes")
+            TempClientBean tempClientBean = response.readEntity(TempClientBean.class);
+            return Double.parseDouble(tempClientBean.getTemperature());
+        } catch (Exception e) {
+            log.error("Error when calling Wiktors PI for outdoor temp ", e);
+            return null;
+        }
+
+    }
+
+
 
     @GET
     @Timed
-    @Path("/temp")
-    public GreenHouseTemp getGreenHouseTemp(){
+    @Path("/info")
+    public GreenHouseInfo getGreenHouseInfo(){
         try {
 
             java.util.Scanner scan = new java.util.Scanner(new java.io.File(configuration.getTempsensorfile()));
@@ -42,25 +93,29 @@ public class GreenHouseStatus {
             String temp = scan.nextLine().split("=")[1];
             temp = new StringBuilder(temp).insert(temp.length()-3, ".").toString();
             Double tempAsDouble = Double.parseDouble(temp);
-            return new GreenHouseTemp(tempAsDouble);
+            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()));
         } catch (FileNotFoundException fnfe) {
             log.error("Couldn't read temperature file: "+configuration.getTempsensorfile());
         }
         return null;
     }
+
+
     @POST
-    @Timed @Path("/pin") public PinState updatePin(@QueryParam("state") String state) {
+    @Timed
+    @Path("/pin")
+    public PinState updatePin(@QueryParam("state") String state) {
         switch (state) {
             case "on":
-                myLed.high();
+                wateringPin.high();
                 break;
             case "off":
-                myLed.low();
+                wateringPin.low();
                 break;
             case "toggle":
-                myLed.toggle();
+                wateringPin.toggle();
         }
 
-        return new PinState(myLed.isHigh());
+        return new PinState(wateringPin.isHigh());
     }
 }

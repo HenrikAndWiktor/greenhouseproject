@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * Created by henrikeriksson on 2017-06-11.
  */
 @CronTrigger(cron = "0/30 * * * * ?")
-public class BackgroundJob  extends Job {
+public class BackgroundJob extends Job {
 
     private final Logger logger = LoggerFactory.getLogger(BackgroundJob.class);
 

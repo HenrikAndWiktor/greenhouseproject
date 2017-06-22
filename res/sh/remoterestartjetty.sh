@@ -1,1 +1,1 @@
-/usr/bin/ssh pi@192.168.0.112 "/home/pi/restartJetty.sh"
+/usr/bin/ssh pi@192.168.0.112 "/home/pi/greenhouse/restartJetty.sh"

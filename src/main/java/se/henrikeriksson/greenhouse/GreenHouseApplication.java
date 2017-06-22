@@ -3,15 +3,16 @@ package se.henrikeriksson.greenhouse;
 import com.pi4j.io.gpio.*;
 
 import io.dropwizard.Application;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import static se.henrikeriksson.greenhouse.resources.GpioPins.getPinFromBOARD;
-
 import org.knowm.dropwizard.sundial.SundialBundle;
 import org.knowm.dropwizard.sundial.SundialConfiguration;
+
 import se.henrikeriksson.greenhouse.health.Health;
 import se.henrikeriksson.greenhouse.resources.GreenHouseStatus;
+import javax.ws.rs.client.Client;
 
 public class GreenHouseApplication extends Application<GreenHouseConfiguration> {
 
@@ -24,20 +25,25 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         return "GreenHouse";
     }
     GpioController gpio = null;
-    GpioPinDigitalOutput myLed = null;
+    GpioPinDigitalOutput wateringPin = null;
+    GpioPinDigitalInput moisturePin = null;
 
     @Override
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
         // TODO: application initialization
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
-        myLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
+        wateringPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
                 "My LED",           // PIN FRIENDLY NAME (optional)
                 PinState.LOW);      // PIN STARTUP STATE (optional)
-        myLed.setShutdownOptions(true, PinState.LOW);
+        wateringPin.setShutdownOptions(true, PinState.LOW);
+
+        moisturePin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, "My moisture sensor", PinPullResistance.PULL_DOWN);
+        // set shutdown state for this input pin
+        moisturePin.setShutdownOptions(true);
+
 
         bootstrap.addBundle(new SundialBundle<GreenHouseConfiguration>() {
-
             @Override
             public SundialConfiguration getSundialConfiguration(GreenHouseConfiguration configuration) {
                 return configuration.getSundialConfiguration();
@@ -51,11 +57,15 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
                     final Environment environment) {
         // TODO: implement application
         environment.healthChecks().register("myHealthCheck", new Health());
-        final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, myLed);
+
+        //Now we added REST Client Resource named RESTClientController
+        final Client client = new JerseyClientBuilder(environment).build("DemoRESTClient");
+
+        final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, moisturePin,client);
         environment.jersey().register(statusResource);
 
         // Add object to ServletContext for accessing from Sundial Jobs
-        environment.getApplicationContext().setAttribute("led", myLed);
+        environment.getApplicationContext().setAttribute("led", wateringPin);
     }
 
 
