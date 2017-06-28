@@ -102,13 +102,13 @@ public class GreenHouseStatus {
     private void stateOfPin(GpioPinDigitalOutput gpdo, String state) {
         switch (state) {
             case "on":
-                acPin.high();
+                gpdo.high();
                 break;
             case "off":
-                acPin.low();
+                gpdo.low();
                 break;
             case "toggle":
-                acPin.toggle();
+                gpdo.toggle();
         }
     }
 
