@@ -93,7 +93,7 @@ public class GreenHouseStatus {
             String temp = scan.nextLine().split("=")[1];
             temp = new StringBuilder(temp).insert(temp.length()-3, ".").toString();
             Double tempAsDouble = Double.parseDouble(temp);
-            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()));
+            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()));
         } catch (FileNotFoundException fnfe) {
             log.error("Couldn't read temperature file: "+configuration.getTempsensorfile());
         }
