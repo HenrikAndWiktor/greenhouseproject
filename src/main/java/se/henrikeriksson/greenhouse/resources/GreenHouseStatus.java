@@ -50,17 +50,18 @@ public class GreenHouseStatus {
         }
     }
     private final Logger log = LoggerFactory.getLogger(GreenHouseStatus.class);
-    GpioPinDigitalOutput wateringPin = null;
+    GpioPinDigitalOutput wateringPin, acPin = null;
     GpioPinDigitalInput moisturePin = null;
     GreenHouseConfiguration configuration = null;
     Client wiktorPiClient = null;
     public static Time lastTimeOnMoisture;
 
-    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput wateringPin, GpioPinDigitalInput moisturePin,Client wiktorPiClient){
+    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput wateringPin, GpioPinDigitalOutput acPin, GpioPinDigitalInput moisturePin,Client wiktorPiClient){
         this.configuration = configuration;
         this.wateringPin = wateringPin;
         this.moisturePin = moisturePin;
         this.wiktorPiClient = wiktorPiClient;
+        this.acPin = acPin;
     }
 
     public Double getOutdoorTemperature()
@@ -70,8 +71,7 @@ public class GreenHouseStatus {
             WebTarget webTarget = wiktorPiClient.target("http://www.wiktoreriksson.se/subdomain/weather/tempapp.json");
             Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
-            @SuppressWarnings("rawtypes")
-            TempClientBean tempClientBean = response.readEntity(TempClientBean.class);
+            @SuppressWarnings(value = "rawtypes") TempClientBean tempClientBean = response.readEntity(TempClientBean.class);
             return Double.parseDouble(tempClientBean.getTemperature());
         } catch (Exception e) {
             log.error("Error when calling Wiktors PI for outdoor temp ", e);
@@ -99,23 +99,31 @@ public class GreenHouseStatus {
         }
         return null;
     }
-
+    private void stateOfPin(GpioPinDigitalOutput gpdo, String state) {
+        switch (state) {
+            case "on":
+                acPin.high();
+                break;
+            case "off":
+                acPin.low();
+                break;
+            case "toggle":
+                acPin.toggle();
+        }
+    }
 
     @POST
     @Timed
     @Path("/pin")
     public PinState updatePin(@QueryParam("state") String state) {
-        switch (state) {
-            case "on":
-                wateringPin.high();
-                break;
-            case "off":
-                wateringPin.low();
-                break;
-            case "toggle":
-                wateringPin.toggle();
-        }
+        stateOfPin(wateringPin, state);
 
         return new PinState(wateringPin.isHigh());
+    }
+
+    @POST @Timed @Path("/fan")
+    public PinState updateAirCondition(@QueryParam("state") String state) {
+        stateOfPin(acPin, state);
+        return new PinState(acPin.isHigh());
     }
 }
