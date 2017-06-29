@@ -25,9 +25,10 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     public String getName() {
         return "GreenHouse";
     }
-    GpioController gpio = null;
-    GpioPinDigitalOutput wateringPin, acPin = null;
-    GpioPinDigitalInput moisturePin = null;
+
+    private GpioController gpio = null;
+    private GpioPinDigitalOutput wateringPin, acPin = null;
+    private GpioPinDigitalInput moisturePin = null;
 
     @Override
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
