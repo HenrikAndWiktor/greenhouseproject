@@ -44,7 +44,7 @@ public class GreenHouseInfo {
     @JsonProperty
     public String getWaterflow() {return waterflow.state();}
 
-    @JsonProperty public String getFanon() {
+    @JsonProperty public String getFanstate() {
         return fan.state();
     }
 
