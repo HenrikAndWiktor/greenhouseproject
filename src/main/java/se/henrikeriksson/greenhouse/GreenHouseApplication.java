@@ -28,14 +28,14 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
 
     private GpioController gpio = null;
     private GpioPinDigitalOutput wateringPin, acPin = null;
-    private GpioPinDigitalInput moisturePin = null;
+    private GpioPinDigitalInput moisturePin = null, waterTankPin = null;
 
     @Override
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
         // TODO: application initialization
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
-        acPin = gpio.provisionDigitalOutputPin(GpioPins.getPinFromBOARD(40), "My fan", PinState.LOW);
+        acPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "My fan", PinState.LOW);
         acPin.setShutdownOptions(true, PinState.LOW);
         wateringPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
                 "My LED",           // PIN FRIENDLY NAME (optional)
@@ -46,7 +46,9 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         // set shutdown state for this input pin
         moisturePin.setShutdownOptions(true);
 
-
+        waterTankPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_27, "My water tank level indicator", PinPullResistance.PULL_UP);
+        // set shutdown state for this input pin
+        moisturePin.setShutdownOptions(true);
 
         bootstrap.addBundle(new SundialBundle<GreenHouseConfiguration>() {
             @Override
@@ -66,7 +68,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         //Now we added REST Client Resource named RESTClientController
         final Client client = new JerseyClientBuilder(environment).build("DemoRESTClient");
 
-        final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, acPin, moisturePin,client);
+        final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, acPin, moisturePin, waterTankPin, client);
         environment.jersey().register(statusResource);
 
         // Add object to ServletContext for accessing from Sundial Jobs

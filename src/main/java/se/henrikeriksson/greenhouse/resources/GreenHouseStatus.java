@@ -51,16 +51,17 @@ public class GreenHouseStatus {
     }
     private final Logger log = LoggerFactory.getLogger(GreenHouseStatus.class);
     GpioPinDigitalOutput wateringPin, acPin = null;
-    GpioPinDigitalInput moisturePin = null;
+    GpioPinDigitalInput moisturePin, waterTankPin = null;
     GreenHouseConfiguration configuration = null;
     Client wiktorPiClient = null;
     public static Time lastTimeOnMoisture;
 
-    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput wateringPin, GpioPinDigitalOutput acPin, GpioPinDigitalInput moisturePin,Client wiktorPiClient){
+    public GreenHouseStatus(GreenHouseConfiguration configuration, GpioPinDigitalOutput wateringPin, GpioPinDigitalOutput acPin, GpioPinDigitalInput moisturePin, GpioPinDigitalInput waterTankPin, Client wiktorPiClient){
         this.configuration = configuration;
         this.wateringPin = wateringPin;
         this.moisturePin = moisturePin;
         this.wiktorPiClient = wiktorPiClient;
+        this.waterTankPin = waterTankPin;
         this.acPin = acPin;
     }
 
@@ -93,7 +94,7 @@ public class GreenHouseStatus {
             String temp = scan.nextLine().split("=")[1];
             temp = new StringBuilder(temp).insert(temp.length()-3, ".").toString();
             Double tempAsDouble = Double.parseDouble(temp);
-            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()));
+            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
         } catch (FileNotFoundException fnfe) {
             log.error("Couldn't read temperature file: "+configuration.getTempsensorfile());
         }

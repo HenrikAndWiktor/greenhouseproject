@@ -11,18 +11,19 @@ public class GreenHouseInfo {
     private Double greenhousetemperature;
     private boolean soilmoisture;
     private Double outdoortemperature;
-    private PinState waterflow, fan;
+    private PinState waterflow, fan, waterTank;
 
     public GreenHouseInfo() {
 
     }
 
-    public GreenHouseInfo(Double greenhousetemperature, boolean isSoilMoisture, Double outdoortemperature, PinState waterflow, PinState fan) {
+    public GreenHouseInfo(Double greenhousetemperature, boolean isSoilMoisture, Double outdoortemperature, PinState waterflow, PinState fan, PinState waterTank) {
         this.greenhousetemperature = greenhousetemperature;
         this.soilmoisture = !isSoilMoisture;
         this.outdoortemperature = outdoortemperature;
         this.waterflow = waterflow;
         this.fan = fan;
+        this.waterTank = waterTank;
     }
 
 
@@ -43,6 +44,9 @@ public class GreenHouseInfo {
 
     @JsonProperty
     public String getWaterflow() {return waterflow.state();}
+
+    @JsonProperty
+    public String getWatertanklevel() {return waterTank.state().equals("on") ? "high" : "low";}
 
     @JsonProperty public String getFanstate() {
         return fan.state();
