@@ -1,35 +1,38 @@
 package se.henrikeriksson.greenhouse.resources;
 
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.RaspiPin;
+
 public class GpioPins {
-    private static final com.pi4j.io.gpio.Pin PIN_3 = com.pi4j.io.gpio.RaspiPin.GPIO_08;
-    private static final com.pi4j.io.gpio.Pin PIN_5 = com.pi4j.io.gpio.RaspiPin.GPIO_09;
-    private static final com.pi4j.io.gpio.Pin PIN_7 = com.pi4j.io.gpio.RaspiPin.GPIO_07;
-    private static final com.pi4j.io.gpio.Pin PIN_8 = com.pi4j.io.gpio.RaspiPin.GPIO_15;
-    private static final com.pi4j.io.gpio.Pin PIN_10 = com.pi4j.io.gpio.RaspiPin.GPIO_16;
-    private static final com.pi4j.io.gpio.Pin PIN_11 = com.pi4j.io.gpio.RaspiPin.GPIO_00;
-    private static final com.pi4j.io.gpio.Pin PIN_12 = com.pi4j.io.gpio.RaspiPin.GPIO_01;
-    private static final com.pi4j.io.gpio.Pin PIN_13 = com.pi4j.io.gpio.RaspiPin.GPIO_02;
-    private static final com.pi4j.io.gpio.Pin PIN_15 = com.pi4j.io.gpio.RaspiPin.GPIO_03;
-    private static final com.pi4j.io.gpio.Pin PIN_16 = com.pi4j.io.gpio.RaspiPin.GPIO_04;
-    private static final com.pi4j.io.gpio.Pin PIN_18 = com.pi4j.io.gpio.RaspiPin.GPIO_05;
-    private static final com.pi4j.io.gpio.Pin PIN_19 = com.pi4j.io.gpio.RaspiPin.GPIO_12;
-    private static final com.pi4j.io.gpio.Pin PIN_21 = com.pi4j.io.gpio.RaspiPin.GPIO_13;
-    private static final com.pi4j.io.gpio.Pin PIN_22 = com.pi4j.io.gpio.RaspiPin.GPIO_06;
-    private static final com.pi4j.io.gpio.Pin PIN_23 = com.pi4j.io.gpio.RaspiPin.GPIO_14;
-    private static final com.pi4j.io.gpio.Pin PIN_24 = com.pi4j.io.gpio.RaspiPin.GPIO_10;
-    private static final com.pi4j.io.gpio.Pin PIN_26 = com.pi4j.io.gpio.RaspiPin.GPIO_11;
-    private static final com.pi4j.io.gpio.Pin PIN_27 = com.pi4j.io.gpio.RaspiPin.GPIO_30;
-    private static final com.pi4j.io.gpio.Pin PIN_28 = com.pi4j.io.gpio.RaspiPin.GPIO_31;
-    private static final com.pi4j.io.gpio.Pin PIN_29 = com.pi4j.io.gpio.RaspiPin.GPIO_21;
-    private static final com.pi4j.io.gpio.Pin PIN_31 = com.pi4j.io.gpio.RaspiPin.GPIO_22;
-    private static final com.pi4j.io.gpio.Pin PIN_32 = com.pi4j.io.gpio.RaspiPin.GPIO_26;
-    private static final com.pi4j.io.gpio.Pin PIN_33 = com.pi4j.io.gpio.RaspiPin.GPIO_23;
-    private static final com.pi4j.io.gpio.Pin PIN_35 = com.pi4j.io.gpio.RaspiPin.GPIO_24;
-    private static final com.pi4j.io.gpio.Pin PIN_36 = com.pi4j.io.gpio.RaspiPin.GPIO_27;
-    private static final com.pi4j.io.gpio.Pin PIN_37 = com.pi4j.io.gpio.RaspiPin.GPIO_25;
-    private static final com.pi4j.io.gpio.Pin PIN_38 = com.pi4j.io.gpio.RaspiPin.GPIO_28;
-    private static final com.pi4j.io.gpio.Pin PIN_40 = com.pi4j.io.gpio.RaspiPin.GPIO_29;
-    private static com.pi4j.io.gpio.Pin[] pfnBoard = new com.pi4j.io.gpio.Pin[40];
+    private static final Pin PIN_3 = RaspiPin.GPIO_08;
+    private static final Pin PIN_5 = RaspiPin.GPIO_09;
+    private static final Pin PIN_7 = RaspiPin.GPIO_07;
+    private static final Pin PIN_8 = RaspiPin.GPIO_15;
+    private static final Pin PIN_10 = RaspiPin.GPIO_16;
+    private static final Pin PIN_11 = RaspiPin.GPIO_00;
+    private static final Pin PIN_12 = RaspiPin.GPIO_01;
+    private static final Pin PIN_13 = RaspiPin.GPIO_02;
+    private static final Pin PIN_15 = RaspiPin.GPIO_03;
+    private static final Pin PIN_16 = RaspiPin.GPIO_04;
+    private static final Pin PIN_18 = RaspiPin.GPIO_05;
+    private static final Pin PIN_19 = RaspiPin.GPIO_12;
+    private static final Pin PIN_21 = RaspiPin.GPIO_13;
+    private static final Pin PIN_22 = RaspiPin.GPIO_06;
+    private static final Pin PIN_23 = RaspiPin.GPIO_14;
+    private static final Pin PIN_24 = RaspiPin.GPIO_10;
+    private static final Pin PIN_26 = RaspiPin.GPIO_11;
+    private static final Pin PIN_27 = RaspiPin.GPIO_30;
+    private static final Pin PIN_28 = RaspiPin.GPIO_31;
+    private static final Pin PIN_29 = RaspiPin.GPIO_21;
+    private static final Pin PIN_31 = RaspiPin.GPIO_22;
+    private static final Pin PIN_32 = RaspiPin.GPIO_26;
+    private static final Pin PIN_33 = RaspiPin.GPIO_23;
+    private static final Pin PIN_35 = RaspiPin.GPIO_24;
+    private static final Pin PIN_36 = RaspiPin.GPIO_27;
+    private static final Pin PIN_37 = RaspiPin.GPIO_25;
+    private static final Pin PIN_38 = RaspiPin.GPIO_28;
+    private static final Pin PIN_40 = RaspiPin.GPIO_29;
+    private static Pin[] pfnBoard = new Pin[40];
 
     static {
         pfnBoard[2] = PIN_3;
@@ -61,7 +64,7 @@ public class GpioPins {
         pfnBoard[37] = PIN_38;
         pfnBoard[39] = PIN_40;
     }
-    public static com.pi4j.io.gpio.Pin getPinFromBOARD(int boardId) {
+    public static Pin getPinFromBOARD(int boardId) {
         if (pfnBoard[boardId-1]==null){
             throw new IllegalArgumentException("Board ID is ground or 3.3/5V port",
                     new NullPointerException("pfn["+(boardId-1)+"] is null"));
