@@ -11,7 +11,7 @@ import org.knowm.dropwizard.sundial.SundialBundle;
 import org.knowm.dropwizard.sundial.SundialConfiguration;
 
 import se.henrikeriksson.greenhouse.health.Health;
-import se.henrikeriksson.greenhouse.resources.GpioPins;
+import se.henrikeriksson.greenhouse.health.RemoteHealth;
 import se.henrikeriksson.greenhouse.resources.GreenHouseStatus;
 import javax.ws.rs.client.Client;
 
@@ -32,7 +32,6 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
 
     @Override
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
-        // TODO: application initialization
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
         acPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "My fan", PinState.LOW);
@@ -62,10 +61,8 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     @Override
     public void run(final GreenHouseConfiguration configuration,
                     final Environment environment) {
-        // TODO: implement application
         environment.healthChecks().register("myHealthCheck", new Health());
-
-        //Now we added REST Client Resource named RESTClientController
+        environment.healthChecks().register("myHealthCheck", new RemoteHealth());
         final Client client = new JerseyClientBuilder(environment).build("DemoRESTClient");
 
         final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, acPin, moisturePin, waterTankPin, client);
