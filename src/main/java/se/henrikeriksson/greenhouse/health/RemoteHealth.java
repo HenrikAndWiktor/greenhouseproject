@@ -6,7 +6,7 @@ import se.henrikeriksson.greenhouse.api.URLHelper;
 public class RemoteHealth extends HealthCheck {
     @Override
     protected Result check() throws Exception {
-        return URLHelper.pingGET("http://wiktoreriksson.se/subdomain/weather/tempapp.json",5) ?
+        return URLHelper.ping("wiktoreriksson.se",1) ?
                 Result.healthy("Wiktors PI accessible"):
                 Result.unhealthy("Wiktors PI down");
     }
