@@ -62,7 +62,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     public void run(final GreenHouseConfiguration configuration,
                     final Environment environment) {
         environment.healthChecks().register("myHealthCheck", new Health());
-        environment.healthChecks().register("myHealthCheck", new RemoteHealth());
+        environment.healthChecks().register("remoteHealth", new RemoteHealth());
         final Client client = new JerseyClientBuilder(environment).build("DemoRESTClient");
 
         final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, acPin, moisturePin, waterTankPin, client);
