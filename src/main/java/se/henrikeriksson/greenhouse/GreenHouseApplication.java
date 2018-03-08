@@ -77,7 +77,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         environment.getApplicationContext().setAttribute("led", wateringPin);
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
-        cors.setInitParameter("allowedOrigins", "*");
+        cors.setInitParameter("Access-Control-Allow-Origin","*");
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
     }
