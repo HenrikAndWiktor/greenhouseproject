@@ -7,13 +7,18 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.knowm.dropwizard.sundial.SundialBundle;
 import org.knowm.dropwizard.sundial.SundialConfiguration;
 
 import se.henrikeriksson.greenhouse.health.Health;
 import se.henrikeriksson.greenhouse.health.RemoteHealth;
 import se.henrikeriksson.greenhouse.resources.GreenHouseStatus;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import javax.ws.rs.client.Client;
+import java.util.EnumSet;
 
 public class GreenHouseApplication extends Application<GreenHouseConfiguration> {
 
@@ -70,6 +75,11 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
 
         // Add object to ServletContext for accessing from Sundial Jobs
         environment.getApplicationContext().setAttribute("led", wateringPin);
+        final FilterRegistration.Dynamic cors =
+                environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+
+        cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
     }
 
 
