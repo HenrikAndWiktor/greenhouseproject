@@ -19,7 +19,7 @@ public class BackgroundJob extends Job {
     @Override
     public void doRun() throws JobInterruptException {
 
-        // pull object from ServletContext, which was added in the apllication's run method
+        // pull object from ServletContext, which was added in the application's run method
         GpioPinDigitalOutput myLed  = (GpioPinDigitalOutput) SundialJobScheduler.getServletContext().getAttribute("led");
 
         logger.info("BackgroundJob is led on true/false ?: " + myLed.isHigh());
