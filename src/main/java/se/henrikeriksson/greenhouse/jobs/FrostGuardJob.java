@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import se.henrikeriksson.greenhouse.GreenHouseApplication;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 
 @CronTrigger(cron = "0 0/5 * * * ?")
 public class FrostGuardJob extends Job {
