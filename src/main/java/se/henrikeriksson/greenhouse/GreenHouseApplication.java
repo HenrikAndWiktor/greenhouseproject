@@ -21,7 +21,7 @@ import javax.ws.rs.client.Client;
 import java.util.EnumSet;
 
 public class GreenHouseApplication extends Application<GreenHouseConfiguration> {
-
+    public static GreenHouseConfiguration myconfig;
     public static void main(final String[] args) throws Exception {
         new GreenHouseApplication().run(args);
     }
@@ -79,7 +79,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter("Access-Control-Allow-Origin","*");
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-
+        myconfig=configuration;
     }
 
 
