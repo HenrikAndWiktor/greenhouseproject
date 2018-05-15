@@ -67,13 +67,20 @@ public class GreenHouseStatus {
 
     public Double getOutdoorTemperature()
     {
+        TempClientBean tempClientBean = null;
         try {
             //Do not hard code in your application
             WebTarget webTarget = wiktorPiClient.target("http://www.wiktoreriksson.se/subdomain/weather/tempapp.json");
-            Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
-            @SuppressWarnings(value = "rawtypes") TempClientBean tempClientBean = response.readEntity(TempClientBean.class);
+            tempClientBean = response.readEntity(TempClientBean.class);
+
             return Double.parseDouble(tempClientBean.getTemperature());
+        } catch(NumberFormatException nfe)
+            {
+                log.error("Error when calling Wiktors PI for outdoor temp. Value is not a double: "+tempClientBean.getTemperature());
+                return null;
+
         } catch (Exception e) {
             log.error("Error when calling Wiktors PI for outdoor temp ", e);
             return null;
