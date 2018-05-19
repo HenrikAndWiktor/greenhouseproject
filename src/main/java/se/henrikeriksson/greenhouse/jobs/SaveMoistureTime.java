@@ -23,7 +23,7 @@ public class SaveMoistureTime extends Job {
     public void doRun() throws JobInterruptException {
         GreenHouseStatus.lastTimeOnMoisture = new GreenHouseStatus.Time(LocalTime.now().getHour()+2,
                 LocalTime.now().getMinute());
-        if (((GpioPinDigitalOutput) SundialJobScheduler.getServletContext().getAttribute("led")).isLow()) {
+        if (((GpioPinDigitalOutput) SundialJobScheduler.getServletContext().getAttribute("watering")).isLow()) {
             log.info(String.format("SaveMoistureTime: Last time on moisture: %s GMT+1", GreenHouseStatus.lastTimeOnMoisture.toString()));
         }
     }

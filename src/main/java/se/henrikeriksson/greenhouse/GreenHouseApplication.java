@@ -42,15 +42,15 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
         acPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "My fan", PinState.LOW);
         acPin.setShutdownOptions(true, PinState.LOW);
         wateringPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
-                "My LED",           // PIN FRIENDLY NAME (optional)
+                "WaterStarter",           // PIN FRIENDLY NAME (optional)
                 PinState.LOW);      // PIN STARTUP STATE (optional)
         wateringPin.setShutdownOptions(true, PinState.LOW);
 
-        moisturePin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, "My moisture sensor", PinPullResistance.PULL_DOWN);
+        moisturePin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_05, "Soil moisture sensor", PinPullResistance.PULL_DOWN);
         // set shutdown state for this input pin
         moisturePin.setShutdownOptions(true);
 
-        waterTankPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_27, "My water tank level indicator", PinPullResistance.PULL_UP);
+        waterTankPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_27, "Water tank level indicator", PinPullResistance.PULL_UP);
         // set shutdown state for this input pin
         moisturePin.setShutdownOptions(true);
 
@@ -66,15 +66,15 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     @Override
     public void run(final GreenHouseConfiguration configuration,
                     final Environment environment) {
-        environment.healthChecks().register("myHealthCheck", new Health());
-        environment.healthChecks().register("remoteHealth", new RemoteHealth());
-        final Client client = new JerseyClientBuilder(environment).build("DemoRESTClient");
+        environment.healthChecks().register("HealthCheck", new Health());
+        environment.healthChecks().register("RemoteHealth", new RemoteHealth());
+        final Client client = new JerseyClientBuilder(environment).build("RESTClient");
 
         final GreenHouseStatus statusResource = new GreenHouseStatus(configuration, wateringPin, acPin, moisturePin, waterTankPin, client);
         environment.jersey().register(statusResource);
 
         // Add object to ServletContext for accessing from Sundial Jobs
-        environment.getApplicationContext().setAttribute("led", wateringPin);
+        environment.getApplicationContext().setAttribute("watering", wateringPin);
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter("Access-Control-Allow-Origin","*");

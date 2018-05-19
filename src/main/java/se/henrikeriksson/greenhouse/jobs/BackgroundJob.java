@@ -20,8 +20,8 @@ public class BackgroundJob extends Job {
     public void doRun() throws JobInterruptException {
 
         // pull object from ServletContext, which was added in the application's run method
-        GpioPinDigitalOutput myLed  = (GpioPinDigitalOutput) SundialJobScheduler.getServletContext().getAttribute("led");
+        GpioPinDigitalOutput watering  = (GpioPinDigitalOutput) SundialJobScheduler.getServletContext().getAttribute("watering");
 
-        logger.info("BackgroundJob is led on true/false ?: " + myLed.isHigh());
+        logger.info("Is water on true/false ?: " + watering.isHigh());
     }
 }
