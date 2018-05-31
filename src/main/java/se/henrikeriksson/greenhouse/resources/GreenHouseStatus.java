@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import se.henrikeriksson.greenhouse.api.GreenHouseInfo;
 import se.henrikeriksson.greenhouse.api.PinState;
 import se.henrikeriksson.greenhouse.client.TempClientBean;
+import se.henrikeriksson.greenhouse.utils.Radio433Utility;
 
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -101,7 +102,9 @@ public class GreenHouseStatus {
             String temp = scan.nextLine().split("=")[1];
             temp = new StringBuilder(temp).insert(temp.length()-3, ".").toString();
             Double tempAsDouble = Double.parseDouble(temp);
-            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
+            //return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
+            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(Radio433Utility.isWaterOn), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
+
         } catch (FileNotFoundException fnfe) {
             log.error("Couldn't read temperature file: "+configuration.getTempsensorfile());
         }
@@ -124,9 +127,23 @@ public class GreenHouseStatus {
     @Timed
     @Path("/pin")
     public PinState updatePin(@QueryParam("state") String state) {
-        stateOfPin(wateringPin, state);
-
-        return new PinState(wateringPin.isHigh());
+        //stateOfPin(wateringPin, state);
+        switch (state) {
+            case "on":
+                Radio433Utility.startWater();
+                break;
+            case "off":
+                Radio433Utility.stopWater();
+                break;
+            case "toggle":
+                if (Radio433Utility.isWaterOn)
+                    Radio433Utility.stopWater();
+                else
+                    Radio433Utility.startWater();
+                break;
+        }
+        return new PinState(Radio433Utility.isWaterOn);
+        //return new PinState(wateringPin.isHigh());
     }
 
     @POST @Timed @Path("/fan")
