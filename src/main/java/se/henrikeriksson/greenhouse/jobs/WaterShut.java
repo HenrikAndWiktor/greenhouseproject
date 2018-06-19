@@ -10,7 +10,7 @@ import se.henrikeriksson.greenhouse.utils.Radio433Utility;
 import java.io.IOException;
 
 // 0 0/5 13 * * ? execute stop every 5 min during 1 hour from  17.
-@CronTrigger(cron = "0 0/5 17 * * ?")
+@CronTrigger(cron = "0 0/5 15 * * ?")
 public class WaterShut extends Job {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Override
