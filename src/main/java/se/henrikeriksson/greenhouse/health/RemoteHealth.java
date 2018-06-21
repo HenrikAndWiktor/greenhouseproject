@@ -1,7 +1,7 @@
 package se.henrikeriksson.greenhouse.health;
 
 import com.codahale.metrics.health.HealthCheck;
-import se.henrikeriksson.greenhouse.api.URLHelper;
+import se.henrikeriksson.greenhouse.utils.URLHelper;
 
 public class RemoteHealth extends HealthCheck {
     @Override

@@ -1,4 +1,4 @@
-package se.henrikeriksson.greenhouse.api;
+package se.henrikeriksson.greenhouse.utils;
 
 public class URLHelper {
     public static boolean ping(String dns, int packets) throws Exception {

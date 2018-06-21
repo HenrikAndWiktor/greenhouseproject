@@ -33,8 +33,9 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
 
     private GpioController gpio = null;
     private GpioPinDigitalOutput wateringPin, acPin = null;
-    private GpioPinDigitalInput moisturePin = null, waterTankPin = null;
-
+    private GpioPinDigitalInput moisturePin = null;
+    public GpioPinDigitalInput waterTankPin = null;
+    public static GreenHouseApplication instance;
     @Override
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
         // create gpio controller instance
@@ -66,6 +67,7 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     @Override
     public void run(final GreenHouseConfiguration configuration,
                     final Environment environment) {
+        instance=this;
         environment.healthChecks().register("HealthCheck", new Health());
         environment.healthChecks().register("RemoteHealth", new RemoteHealth());
         final Client client = new JerseyClientBuilder(environment).build("RESTClient");
