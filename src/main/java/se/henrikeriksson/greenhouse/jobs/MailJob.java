@@ -15,5 +15,8 @@ public class MailJob extends Job {
         if (GreenHouseApplication.instance.waterTankPin.isState(PinState.HIGH)) {
             MailHelper.waterhighmail();
         }
+        if (GreenHouseApplication.instance.waterTankPin.isState(PinState.HIGH)) {
+            MailHelper.waterlowmail();
+        }
     }
 }
