@@ -17,7 +17,7 @@ public class MailHelper {
             log.info(String.format("Water is low, send email to: %s", emailReceiver));
             Runtime r = Runtime.getRuntime();
             try {
-                r.exec(String.format("echo -e \"Subject: Tank\n\nALERT: Water low in tank. You will get a mail when you fix the water tank.\" | sendmail -v %s", emailReceiver));
+                r.exec(String.format("echo -e \"Subject: Tank\\n\\nALERT: Water low in tank. You will get a mail when you fix the water tank.\" | sendmail -v %s", emailReceiver));
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);

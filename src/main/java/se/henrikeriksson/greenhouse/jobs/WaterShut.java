@@ -16,15 +16,5 @@ public class WaterShut extends Job {
     @Override
     public void doRun() throws JobInterruptException {
         Radio433Utility.stopWater();
-        /*try {
-            log.info("Shut off watering");
-            int code=1394004;
-            log.info(String.format("code=%s", code));
-            Runtime r = Runtime.getRuntime();
-            r.exec(String.format("sudo /home/pi/433/wiringPi/433Utils/RPi_utils/codesend %s",code));
-            log.info("Water pump deactivated");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 }
