@@ -53,12 +53,17 @@
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.knowm</groupId>
             <artifactId>dropwizard-sundial</artifactId>
             <version>1.1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
     <reporting>
@@ -171,11 +176,11 @@
                         <configuration>
                             <tasks>
                                 <exec executable="/bin/bash">
-                                  <arg value="./res/sh/sftpjar.sh"/>
-                              </exec>
-                                  <exec executable="/bin/bash">
-                                            <arg value="./res/sh/remoterestartjetty.sh"/>
-                                         </exec>
+                                    <arg value="./res/sh/sftpjar.sh"/>
+                                </exec>
+                                <!--<exec executable="/bin/bash">
+                                    <arg value="./res/sh/remoterestartjetty.sh"/>
+                                </exec>-->
                             </tasks>
                         </configuration>
                     </execution>

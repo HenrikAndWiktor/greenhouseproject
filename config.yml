@@ -22,3 +22,6 @@ sundial:
   global-lock-on-load: false
   annotated-jobs-package-name: se.henrikeriksson.greenhouse.jobs
   tasks: [startjob, stopjob]
+
+mailUser: farsansraspberrypi@gmail.com
+mailPassword: ChangeMe

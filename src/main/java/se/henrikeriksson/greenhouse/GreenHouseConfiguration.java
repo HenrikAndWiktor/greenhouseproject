@@ -18,6 +18,23 @@ public class GreenHouseConfiguration extends Configuration {
         return tempsensorfile;
     }
 
+
+    @NotEmpty
+    private String mailPassword;
+
+    @JsonProperty
+    public String getMailPassword() {
+        return mailPassword;
+    }
+
+    @NotEmpty
+    private String mailUser;
+
+    @JsonProperty
+    public String getMailUser() {
+        return mailUser;
+    }
+
     @JsonProperty
     public void setTempsensorfile(String tempsensorfile) {
         this.tempsensorfile = tempsensorfile;

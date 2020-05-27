@@ -83,13 +83,19 @@ public class GreenHouseStatus {
                 return null;
 
         } catch (Exception e) {
-            log.error("Error when calling Wiktors PI for outdoor temp ", e);
+            log.error("Error when calling Wiktors PI for outdoor temp: "+e.getMessage());
             return null;
         }
 
     }
 
 
+    @GET
+    @Timed
+    @Path("/test")
+    public String test(){
+        return "hej";
+    }
 
     @GET
     @Timed
@@ -102,8 +108,8 @@ public class GreenHouseStatus {
             String temp = scan.nextLine().split("=")[1];
             temp = new StringBuilder(temp).insert(temp.length()-3, ".").toString();
             Double tempAsDouble = Double.parseDouble(temp);
-            //return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
-            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(Radio433Utility.isWaterOn), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
+            return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(wateringPin.isHigh()), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
+            //return new GreenHouseInfo(tempAsDouble, moisturePin.isHigh(), getOutdoorTemperature(), new PinState(Radio433Utility.isWaterOn), new PinState(acPin.isHigh()), new PinState(waterTankPin.isHigh()));
 
         } catch (FileNotFoundException fnfe) {
             log.error("Couldn't read temperature file: "+configuration.getTempsensorfile());
@@ -127,8 +133,8 @@ public class GreenHouseStatus {
     @Timed
     @Path("/pin")
     public PinState updatePin(@QueryParam("state") String state) {
-        //stateOfPin(wateringPin, state);
-        switch (state) {
+        stateOfPin(wateringPin, state);
+        /**switch (state) {
             case "on":
                 Radio433Utility.startWater();
                 break;
@@ -143,7 +149,8 @@ public class GreenHouseStatus {
                 break;
         }
         return new PinState(Radio433Utility.isWaterOn);
-        //return new PinState(wateringPin.isHigh());
+         **/
+        return new PinState(wateringPin.isHigh());
     }
 
     @POST @Timed @Path("/fan")
