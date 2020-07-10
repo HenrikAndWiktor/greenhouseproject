@@ -11,13 +11,20 @@ import javax.validation.constraints.*;
 
 public class GreenHouseConfiguration extends Configuration {
     @NotEmpty
-    private String tempsensorfile;
+    private String inDoorTempsensorfile;
 
     @JsonProperty
-    public String getTempsensorfile() {
-        return tempsensorfile;
+    public String getInDoorTempsensorfile() {
+        return inDoorTempsensorfile;
     }
 
+    @NotEmpty
+    private String outDoorTempsensorfile;
+
+    @JsonProperty
+    public String getOutDoorTempsensorfile() {
+        return outDoorTempsensorfile;
+    }
 
     @NotEmpty
     private String mailPassword;
@@ -36,8 +43,13 @@ public class GreenHouseConfiguration extends Configuration {
     }
 
     @JsonProperty
-    public void setTempsensorfile(String tempsensorfile) {
-        this.tempsensorfile = tempsensorfile;
+    public void setInDoorTempsensorfile(String inDoorTempsensorfile) {
+        this.inDoorTempsensorfile = inDoorTempsensorfile;
+    }
+
+    @JsonProperty
+    public void setOutDoorTempsensorfile(String outDoorTempsensorfile) {
+        this.outDoorTempsensorfile = outDoorTempsensorfile;
     }
 
     @Valid

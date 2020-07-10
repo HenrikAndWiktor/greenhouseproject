@@ -40,17 +40,23 @@ public class GreenHouseApplication extends Application<GreenHouseConfiguration> 
     public void initialize(final Bootstrap<GreenHouseConfiguration> bootstrap) {
         // create gpio controller instance
         gpio = GpioFactory.getInstance();
+
+        // Pi4j/WiringPi GPIO_29 is same as position 40 and named GPIO21 on Pi.
         acPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "My fan", PinState.LOW);
         acPin.setShutdownOptions(true, PinState.LOW);
+
+        // Pi4j/WiringPi GPIO_01 is same as position 12 and named GPIO18 on Pi.
         wateringPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01,   // PIN
                 "WaterStarter",           // PIN FRIENDLY NAME (optional)
                 PinState.LOW);      // PIN STARTUP STATE (optional)
         wateringPin.setShutdownOptions(true, PinState.LOW);
 
+        // Pi4j/WiringPi GPIO_05 is same as position 18 and named GPIO24 on Pi.
         moisturePin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_05, "Soil moisture sensor", PinPullResistance.PULL_DOWN);
         // set shutdown state for this input pin
         moisturePin.setShutdownOptions(true);
 
+        // Pi4j/WiringPi GPIO_27 is same as position 36 and named GPIO16 on Pi.
         waterTankPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_27, "Water tank level indicator", PinPullResistance.PULL_UP);
         // set shutdown state for this input pin
         moisturePin.setShutdownOptions(true);

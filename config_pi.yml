@@ -3,7 +3,8 @@ logging:
   loggers:
     greenhouse: DEBUG
 
-tempsensorfile: "/sys/bus/w1/devices/28-000007105864/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
+inDoorTempsensorfile: "/sys/bus/w1/devices/28-000007105864/w1_slave"
+outDoorTempsensorfile: "/sys/bus/w1/devices/28-0301a2792993/w1_slave"
 
 #Format:
 #xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
@@ -19,6 +20,5 @@ sundial:
   annotated-jobs-package-name: se.henrikeriksson.greenhouse.jobs
   tasks: [startjob, stopjob]
 
-
 mailUser: farsansraspberrypi@gmail.com
-mailPassword: ChangeMe
+mailPassword: CHANGEME

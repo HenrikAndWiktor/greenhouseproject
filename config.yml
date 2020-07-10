@@ -5,7 +5,8 @@ logging:
   loggers:
     greenhouse: DEBUG
 
-tempsensorfile: "/Users/henrikeriksson/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
+inDoorTempsensorfile: "/Users/henrikeriksson/1/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
+outDoorTempsensorfile: "/Users/henrikeriksson/2/w1_slave" #change this to your adafruit tempature sensors "w1_slave" file!
 #Format:
 #xx xx xx xx xx xx xx xx xx : crc=xx [YES/NO]
 #xx xx xx xx xx xx xx xx xx t=xxxxx

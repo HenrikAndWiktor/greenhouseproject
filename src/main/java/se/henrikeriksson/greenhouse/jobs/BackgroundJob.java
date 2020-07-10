@@ -19,7 +19,12 @@ public class BackgroundJob extends Job {
 
     @Override
     public void doRun() throws JobInterruptException {
+        GpioPinDigitalOutput wateringPin = (GpioPinDigitalOutput) SundialJobScheduler.getServletContext()
+                .getAttribute("watering");
 
-          logger.info("Is water on "+Radio433Utility.isWaterOn);
+        logger.info("Is water on "+wateringPin.isHigh());
+        //logger.info("Is water on "+Radio433Utility.isWaterOn);
+
+
     }
 }

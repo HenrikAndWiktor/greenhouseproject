@@ -175,10 +175,10 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <exec executable="/bin/bash">
+                                <!--   <exec executable="/bin/bash">
                                     <arg value="./res/sh/sftpjar.sh"/>
                                 </exec>
-                                <!--<exec executable="/bin/bash">
+                             <exec executable="/bin/bash">
                                     <arg value="./res/sh/remoterestartjetty.sh"/>
                                 </exec>-->
                             </tasks>
